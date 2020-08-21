@@ -21,6 +21,27 @@ class ParkingLot
     @slots.select(&:available?)
   end
 
+  def used_slots
+    @slots - available_slots
+  end
+
+  def plate_numbers_for_cars_with_colour(colour)
+    scoped = used_slots.select { |slot| slot.car.colour == colour }
+    scoped.map { |slot| slot.car.plate_number }
+  end
+
+  def slot_numbers_for_cars_with_colour(colour)
+    scoped = used_slots.select { |slot| slot.car.colour == colour }
+    scoped.map(&:number)
+  end
+
+  def slot_number_for_registration_number(plate_number)
+    scoped = used_slots.select { |slot| slot.car.plate_number == plate_number }
+    return 'Not found' if scoped.empty?
+
+    scoped.first.number
+  end
+
   private
 
   def build_slots(count)

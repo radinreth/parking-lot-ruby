@@ -68,14 +68,53 @@ RSpec.describe ParkingLot do
         expect(new_slot.number).to eq(1)
       end
     end
-  end
 
-  xdescribe 'Example: interactive' do
-    describe '.find' do
-      it 'shows all plate numbers of all cars with a particular colour'
-      it 'shows slot number of a given plate number'
-      it 'shows all slot numbers of a particular colour'
-      it 'shows NOT FOUND for non-parked plate number'
+    describe 'find' do
+      let(:car1) { Car.new(plate_number: 'ABC-1234', colour: 'White') }
+      let(:car2) { Car.new(plate_number: 'ABC-9999', colour: 'White') }
+      let(:car3) { Car.new(plate_number: 'ABC-0001', colour: 'Black') }
+      let(:car4) { Car.new(plate_number: 'ABC-7777', colour: 'Red') }
+      let(:car5) { Car.new(plate_number: 'ABC-2701', colour: 'Blue') }
+      let(:car6) { Car.new(plate_number: 'ABC-3141', colour: 'Black') }
+      let(:new_car) { Car.new(plate_number: 'ABC-333', colour: 'White') }
+
+      before do
+        parking_lot.park(car1)
+        parking_lot.park(car2)
+        parking_lot.park(car3)
+        slot4 = parking_lot.park(car4)
+        parking_lot.park(car5)
+        parking_lot.park(car6)
+
+        slot4.available!
+        parking_lot.park(new_car)
+      end
+
+      it '.plate_numbers_for_cars_with_colour' do
+        plate_numbers = parking_lot.plate_numbers_for_cars_with_colour('White')
+
+        expect(plate_numbers).to eq %w[ABC-1234 ABC-9999 ABC-333]
+      end
+
+      it '.slot_numbers_for_cars_with_colour' do
+        plate_numbers = parking_lot.slot_numbers_for_cars_with_colour('White')
+
+        expect(plate_numbers).to eq [1, 2, 4]
+      end
+
+      describe '.slot_number_for_registration_number' do
+        it 'returns slot_number' do
+          plate_numbers = parking_lot.slot_number_for_registration_number('ABC-3141')
+
+          expect(plate_numbers).to eq 6
+        end
+
+        it 'returns not found' do
+          plate_numbers = parking_lot.slot_number_for_registration_number('DEF-1111')
+
+          expect(plate_numbers).to eq 'Not found'
+        end
+      end
     end
   end
 
