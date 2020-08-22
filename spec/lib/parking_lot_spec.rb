@@ -60,7 +60,7 @@ RSpec.describe ParkingLot do
           @small_parking_lot.park(red_toyota)
           @small_parking_lot.park(blue_bmw)
           @small_parking_lot.park(green_lambo)
-        end.to raise_error(OverLimitException)
+        end.to raise_error(StandardError, 'Sorry, parking lot is full')
       end
     end
 
@@ -128,9 +128,9 @@ RSpec.describe ParkingLot do
           end
 
           it 'returns not found' do
-            plate_numbers = @parking_lot.slot_number_for_registration_number('DEF-1111')
-
-            expect(plate_numbers).to eq 'Not found'
+            expect {
+              @parking_lot.slot_number_for_registration_number('DEF-1111')
+            }.to raise_error(StandardError, 'Not found')
           end
         end
       end

@@ -17,7 +17,7 @@ class ParkingLot
   end
 
   def park(car_attrs)
-    raise OverLimitException if free_slots.count.zero?
+    raise StandardError.new('Sorry, parking lot is full') if free_slots.count.zero?
 
     car = Car.new(car_attrs)
     slot = free_slots.first
@@ -60,7 +60,7 @@ class ParkingLot
   end
 
   def status_say(result)
-    header = 'Slot No. | Plate Number | Colour'
+    header = 'Slot No. | Plate Number | Colour <CR>'
     header + result
   end
 
@@ -69,16 +69,28 @@ class ParkingLot
     scoped.map { |slot| slot.car.plate_number }
   end
 
+  def plate_numbers_for_cars_with_colour_say(result)
+    result.join(', ')
+  end
+
   def slot_numbers_for_cars_with_colour(colour)
     scoped = used_slots.select { |slot| slot.car.colour == colour }
     scoped.map(&:number)
   end
 
+  def slot_numbers_for_cars_with_colour_say(result)
+    result.join(', ')
+  end
+
   def slot_number_for_registration_number(plate_number)
     scoped = used_slots.select { |slot| slot.car.plate_number == plate_number }
-    return 'Not found' if scoped.empty?
+    raise StandardError.new('Not found') if scoped.empty?
 
     scoped.first.number
+  end
+
+  def slot_number_for_registration_number_say(result)
+    result
   end
 
   private
