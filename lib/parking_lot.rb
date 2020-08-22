@@ -7,7 +7,7 @@ class OverLimitException < StandardError; end
 class ParkingLot
   attr_accessor :slots
 
-  def create(slots_count)
+  def create_parking_lot(slots_count)
     @slots = build_slots(slots_count)
     self
   end
@@ -29,8 +29,22 @@ class ParkingLot
     @slots - free_slots
   end
 
-  def leave(slot)
-    slot.free!
+  def leave(slot_number)
+    slot = used_slots.select { |s| s.number == slot_number }
+    slot&.free!
+  end
+
+  def status
+    result = []
+    used_slots.each do |slot|
+      info  = [slot.number]
+      info += [slot.car.plate_number]
+      info += [slot.car.colour]
+
+      result << info.join(' | ')
+    end
+
+    result.join('<CR>')
   end
 
   def plate_numbers_for_cars_with_colour(colour)

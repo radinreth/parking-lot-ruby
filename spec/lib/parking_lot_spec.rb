@@ -6,7 +6,7 @@ RSpec.describe ParkingLot do
   let(:parking_lot) { ParkingLot.new }
 
   before do
-    @parking_lot = parking_lot.create(6)
+    @parking_lot = parking_lot.create_parking_lot(6)
   end
 
   it '#free_slots' do
@@ -52,7 +52,7 @@ RSpec.describe ParkingLot do
       let(:green_lambo) { Car.new(plate_number: 'ABC-2222', colour: 'Green') }
 
       before do
-        @small_parking_lot = small_parking_lot.create(2)
+        @small_parking_lot = small_parking_lot.create_parking_lot(2)
       end
 
       it 'cannot park over limit' do
@@ -96,32 +96,42 @@ RSpec.describe ParkingLot do
         @parking_lot.park(car6)
 
         slot4.free!
-        @parking_lot.park(new_car)
       end
 
-      it '.plate_numbers_for_cars_with_colour' do
-        plate_numbers = @parking_lot.plate_numbers_for_cars_with_colour('White')
-
-        expect(plate_numbers).to eq %w[ABC-1234 ABC-9999 ABC-333]
+      it '#status' do
+        puts @parking_lot.status
+        expect(@parking_lot.status).to match(/#{car1[:plate_number]}/)
       end
 
-      it '.slot_numbers_for_cars_with_colour' do
-        plate_numbers = @parking_lot.slot_numbers_for_cars_with_colour('White')
-
-        expect(plate_numbers).to eq [1, 2, 4]
-      end
-
-      describe '.slot_number_for_registration_number' do
-        it 'returns slot_number' do
-          plate_numbers = @parking_lot.slot_number_for_registration_number('ABC-3141')
-
-          expect(plate_numbers).to eq 6
+      context "government regulation" do
+        before do
+          @parking_lot.park(new_car)
         end
 
-        it 'returns not found' do
-          plate_numbers = @parking_lot.slot_number_for_registration_number('DEF-1111')
+        it '.plate_numbers_for_cars_with_colour' do
+          plate_numbers = @parking_lot.plate_numbers_for_cars_with_colour('White')
 
-          expect(plate_numbers).to eq 'Not found'
+          expect(plate_numbers).to eq %w[ABC-1234 ABC-9999 ABC-333]
+        end
+
+        it '.slot_numbers_for_cars_with_colour' do
+          plate_numbers = @parking_lot.slot_numbers_for_cars_with_colour('White')
+
+          expect(plate_numbers).to eq [1, 2, 4]
+        end
+
+        describe '.slot_number_for_registration_number' do
+          it 'returns slot_number' do
+            plate_numbers = @parking_lot.slot_number_for_registration_number('ABC-3141')
+
+            expect(plate_numbers).to eq 6
+          end
+
+          it 'returns not found' do
+            plate_numbers = @parking_lot.slot_number_for_registration_number('DEF-1111')
+
+            expect(plate_numbers).to eq 'Not found'
+          end
         end
       end
     end
