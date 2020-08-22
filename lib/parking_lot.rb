@@ -1,28 +1,36 @@
 require 'slot'
+require 'car'
+require 'byebug'
 
 class OverLimitException < StandardError; end
 
 class ParkingLot
   attr_accessor :slots
 
-  def initialize(slots_count:)
+  def create(slots_count)
     @slots = build_slots(slots_count)
+    self
   end
 
-  def park(car)
-    raise OverLimitException if available_slots.count.zero?
+  def park(car_attrs)
+    raise OverLimitException if free_slots.count.zero?
 
-    slot = available_slots.first
+    car = Car.new(car_attrs)
+    slot = free_slots.first
     slot.occupy(car)
     slot
   end
 
-  def available_slots
-    @slots.select(&:available?)
+  def free_slots
+    @slots.select(&:free?)
   end
 
   def used_slots
-    @slots - available_slots
+    @slots - free_slots
+  end
+
+  def leave(slot)
+    slot.free!
   end
 
   def plate_numbers_for_cars_with_colour(colour)

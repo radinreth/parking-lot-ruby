@@ -5,11 +5,11 @@ class Slot
     @car = car
   end
 
-  def available?
+  def free?
     car.nil?
   end
 
-  def available!
+  def free!
     self.car = nil
   end
 

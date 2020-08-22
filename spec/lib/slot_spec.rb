@@ -9,15 +9,15 @@ RSpec.describe Slot do
 
   specify { expect(slot.number).to eq(1) }
 
-  describe '#available?' do
+  describe '#free?' do
     let(:car) { Car.new(plate_number: 'abc-1111', colour: 'White') }
 
-    specify { expect(slot).to be_available }
+    specify { expect(slot).to be_free }
 
-    it 'is not available' do
+    it 'is not free' do
       slot.car = car
 
-      expect(slot).not_to be_available
+      expect(slot).not_to be_free
     end
   end
 end
