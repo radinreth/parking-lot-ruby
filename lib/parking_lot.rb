@@ -1,5 +1,5 @@
-require 'slot'
-require 'car'
+require_relative 'slot'
+require_relative 'car'
 require 'byebug'
 
 class OverLimitException < StandardError; end
@@ -12,6 +12,10 @@ class ParkingLot
     self
   end
 
+  def create_parking_lot_say(parking_lot)
+    "Created a parking lot with #{parking_lot.slots.count} slots"
+  end
+
   def park(car_attrs)
     raise OverLimitException if free_slots.count.zero?
 
@@ -19,6 +23,10 @@ class ParkingLot
     slot = free_slots.first
     slot.occupy(car)
     slot
+  end
+
+  def park_say(slot)
+    "Allocated slot number: #{slot.number}"
   end
 
   def free_slots
@@ -30,8 +38,12 @@ class ParkingLot
   end
 
   def leave(slot_number)
-    slot = used_slots.select { |s| s.number == slot_number }
+    slot = used_slots.select { |s| s.number == slot_number }.first
     slot&.free!
+  end
+
+  def leave_say(slot)
+    "Slot number #{slot.number} is free"
   end
 
   def status
@@ -45,6 +57,11 @@ class ParkingLot
     end
 
     result.join('<CR>')
+  end
+
+  def status_say(result)
+    header = 'Slot No. | Plate Number | Colour'
+    header + result
   end
 
   def plate_numbers_for_cars_with_colour(colour)

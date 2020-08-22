@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+
+require 'tty-prompt'
+require_relative 'lib/parking_lot'
+
+# args
+require_relative 'lib/args/create_parking_lot_args.rb'
+require_relative 'lib/args/park_args.rb'
+require_relative 'lib/args/leave_args.rb'
+require_relative 'lib/args/status_args.rb'
+
+prompt = TTY::Prompt.new
+
+# patch
+class String
+  def classify
+    self.split('/').collect do |c|
+      c.split('_').collect(&:capitalize).join
+    end.join('::')
+  end
+end
+
+parking_lot = ParkingLot.new
+WHITELIST_COMMANDS = %(create_parking_lot park leave status).freeze
+
+loop do
+  raw_input = prompt.ask('Input:')
+  input = raw_input.split
+  cmd = input[0]
+
+  break unless WHITELIST_COMMANDS.include?(cmd)
+
+  klazz = Object.const_get("#{cmd}_args".classify)
+  args = klazz.new(input[1..-1]).args
+
+  result = args.nil? ? parking_lot.send(cmd) : parking_lot.send(cmd, args)
+  prompt.say(parking_lot.send("#{cmd}_say".to_sym, result))
+end

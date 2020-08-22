@@ -11,6 +11,7 @@ class Slot
 
   def free!
     self.car = nil
+    self
   end
 
   def occupy(car)
