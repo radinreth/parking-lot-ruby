@@ -1,43 +1,34 @@
 #!/usr/bin/env ruby
 
 require 'tty-prompt'
+require_relative 'lib/vendors/string'
 require_relative 'lib/parking_lot'
-
 
 WHITELIST_COMMANDS = %(create_parking_lot park leave status plate_numbers_for_cars_with_colour slot_numbers_for_cars_with_colour slot_number_for_registration_number).freeze
 
 # args
-Dir.glob(File.expand_path('../lib/args/*.rb', __FILE__)).each do |file|
+Dir.glob(File.expand_path('lib/args/*.rb', __dir__)).each do |file|
   require_relative file
 end
 
 prompt = TTY::Prompt.new
 
-# patch
-class String
-  def classify
-    self.split('/').collect do |c|
-      c.split('_').collect(&:capitalize).join
-    end.join('::')
-  end
-end
+puts ARGS
+# parking_lot = ParkingLot.new
+# loop do
+#   begin
+#     raw_input = prompt.ask('Input:')
+#     input = raw_input.split
+#     cmd = input[0]
 
-parking_lot = ParkingLot.new
+#     break unless WHITELIST_COMMANDS.include?(cmd)
 
-loop do
-  begin
-    raw_input = prompt.ask('Input:')
-    input = raw_input.split
-    cmd = input[0]
+#     klazz = Object.const_get("#{cmd}_args".classify)
+#     args = klazz.new(input[1..-1]).args
 
-    break unless WHITELIST_COMMANDS.include?(cmd)
-
-    klazz = Object.const_get("#{cmd}_args".classify)
-    args = klazz.new(input[1..-1]).args
-
-    result = args.nil? ? parking_lot.send(cmd) : parking_lot.send(cmd, args)
-    prompt.say(parking_lot.send("#{cmd}_say".to_sym, result))
-  rescue => e
-    prompt.say(e.message)
-  end
-end
+#     result = args.nil? ? parking_lot.send(cmd) : parking_lot.send(cmd, args)
+#     prompt.say(parking_lot.send("#{cmd}_say".to_sym, result))
+#   rescue StandardError => e
+#     prompt.say(e.message)
+#   end
+# end

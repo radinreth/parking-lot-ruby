@@ -1,0 +1,15 @@
+create_parking_lot 6
+park ABC-1234 White
+park ABC-9999 White
+park ABC-0001 Black
+park ABC-7777 Red
+park ABC-2701 Blue
+park ABC-3141 Black
+leave 4
+status
+park ABC-333 White
+park ABC-9998 White
+plate_numbers_for_cars_with_colour White
+slot_numbers_for_cars_with_colour White
+slot_number_for_registration_number ABC-3141
+slot_number_for_registration_number ABD-1111
