@@ -17,7 +17,7 @@ class ParkingLot
   end
 
   def park(car_attrs)
-    raise StandardError.new('Sorry, parking lot is full') if free_slots.count.zero?
+    raise StandardError, 'Sorry, parking lot is full' if free_slots.count.zero?
 
     car = Car.new(car_attrs)
     slot = free_slots.first
@@ -84,7 +84,7 @@ class ParkingLot
 
   def slot_number_for_registration_number(plate_number)
     scoped = used_slots.select { |slot| slot.car.plate_number == plate_number }
-    raise StandardError.new('Not found') if scoped.empty?
+    raise StandardError, 'Not found' if scoped.empty?
 
     scoped.first.number
   end
