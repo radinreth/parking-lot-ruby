@@ -1,0 +1,15 @@
+Created a parking lot with 6 slots
+Allocated slot number: 1
+Allocated slot number: 2
+Allocated slot number: 3
+Allocated slot number: 4
+Allocated slot number: 5
+Allocated slot number: 6
+Slot number 4 is free
+Slot No. | Plate Number | Colour <CR>1 | ABC-1234 | White<CR>2 | ABC-9999 | White<CR>3 | ABC-0001 | Black<CR>5 | ABC-2701 | Blue<CR>6 | ABC-3141 | Black
+Allocated slot number: 4
+Sorry, parking lot is full
+ABC-1234, ABC-9999, ABC-333
+1, 2, 4
+6
+Not found

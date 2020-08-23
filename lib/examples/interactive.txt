@@ -1,0 +1,50 @@
+Input: create_parking_lot 6
+Output: Created a parking lot with 6 slots
+
+Input: park ABC-1234 White
+Output: Allocated slot number: 1
+
+Input: park ABC-9999 White
+Output: Allocated slot number: 2
+
+Input: park ABC-0001 Black
+Output: Allocated slot number: 3
+
+Input: park ABC-7777 Red
+Output: Allocated slot number: 4
+
+Input: park ABC-2701 Blue
+Output: Allocated slot number: 5
+
+Input: park ABC-3141 Black
+Output: Allocated slot number: 6
+
+Input: leave 4
+Output: Slot number 4 is free
+
+Input: status
+Output:
+Slot No. | Plate Number | Colour
+1 | ABC-1234 | White
+2 | ABC-9999 | White
+3 | ABC-0001 | Black
+5 | ABC-2701 | Blue
+6 | ABC-3141 | Black
+
+Input: park ABC-333 White
+Output: Allocated slot number: 4
+
+Input: park ABC-9998 White
+Output: Sorry, parking lot is full
+
+Input: plate_numbers_for_cars_with_colour White
+Output: ABC-1234, ABC-9999, ABC-333
+
+Input: slot_numbers_for_cars_with_colour White
+Output: 1, 2, 4
+
+Input: slot_number_for_registration_number ABC-3141
+Output: 6
+
+Input: slot_number_for_registration_number DEF-1111
+Output: Not found
