@@ -11,10 +11,28 @@ Dir.glob(File.expand_path('lib/args/*.rb', __dir__)).each do |file|
   require_relative file
 end
 
-prompt = TTY::Prompt.new
+parking_lot = ParkingLot.new
 
-puts ARGS
-# parking_lot = ParkingLot.new
+File.readlines(ARGV[0]).each do |line|
+  begin
+    raw_input = line
+    input = raw_input.split
+    cmd = input[0]
+
+    next unless WHITELIST_COMMANDS.include?(cmd)
+    break if cmd.downcase == 'exit'
+
+    klazz = Object.const_get("#{cmd}_args".classify)
+    args = klazz.new(input[1..-1]).args
+
+    result = args.nil? ? parking_lot.send(cmd) : parking_lot.send(cmd, args)
+    puts parking_lot.send("#{cmd}_say".to_sym, result)
+  rescue => e
+    puts e.message
+  end
+end
+
+prompt = TTY::Prompt.new
 # loop do
 #   begin
 #     raw_input = prompt.ask('Input:')
