@@ -10,7 +10,7 @@ RSpec.describe Slot do
   specify { expect(slot.number).to eq(1) }
 
   describe '#free?' do
-    let(:car) { Car.new(plate_number: 'abc-1111', colour: 'White', entry_time: '08:00') }
+    let(:car) { Car.new(plate_number: 'abc-1111', colour: 'White') }
 
     specify { expect(slot).to be_free }
 

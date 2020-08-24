@@ -19,7 +19,7 @@ class ParkingLot
     "Created a parking lot with #{parking_lot.slots.count} slots"
   end
 
-  def park(car_attrs)
+  def park(car_attrs, entry_time:)
     raise StandardError, 'Sorry, parking lot is full' if free_slots.count.zero?
 
     car = Car.new(car_attrs)
@@ -40,8 +40,8 @@ class ParkingLot
     @slots - free_slots
   end
 
-  def leave(slot_number)
-    slot = used_slots.select { |s| s.number == slot_number }.first
+  def leave(plate_number, exit_time)
+    slot = used_slots.select { |s| s.car.plate_number == plate_number }.first
     slot&.free!
   end
 
