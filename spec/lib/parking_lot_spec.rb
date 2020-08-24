@@ -6,8 +6,11 @@ RSpec.describe ParkingLot do
   let(:parking_lot) { ParkingLot.new }
 
   before do
-    @parking_lot = parking_lot.create_parking_lot(6)
+    @parking_lot = parking_lot.create_parking_lot(6, 1.00, 0)
   end
+
+  specify { expect(@parking_lot.rate_hourly).to eq(1.00) }
+  specify { expect(@parking_lot.grace_period).to eq(0) }
 
   it '#free_slots' do
     expect(@parking_lot.free_slots.count).to eq(6)
@@ -52,7 +55,7 @@ RSpec.describe ParkingLot do
       let(:green_lambo) { Car.new(plate_number: 'ABC-2222', colour: 'Green') }
 
       before do
-        @small_parking_lot = small_parking_lot.create_parking_lot(2)
+        @small_parking_lot = small_parking_lot.create_parking_lot(2, 1.00, 0)
       end
 
       it 'cannot park over limit' do

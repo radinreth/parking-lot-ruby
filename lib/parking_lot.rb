@@ -6,9 +6,12 @@ class OverLimitException < StandardError; end
 
 class ParkingLot
   attr_accessor :slots
+  attr_reader :rate_hourly, :grace_period
 
-  def create_parking_lot(slots_count)
+  def create_parking_lot(slots_count, rate_hourly, grace_period)
     @slots = build_slots(slots_count)
+    @rate_hourly = rate_hourly
+    @grace_period = grace_period
     self
   end
 
