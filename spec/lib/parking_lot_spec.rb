@@ -17,8 +17,8 @@ RSpec.describe ParkingLot do
   end
 
   describe '#park' do
-    let(:red_toyota) { { plate_number: 'ABC-1111', colour: 'Red' } }
-    let(:blue_bmw) { { plate_number: 'ABC-1112', colour: 'Blue' } }
+    let(:red_toyota) { { plate_number: 'ABC-1111', colour: 'Red', entry_time: '08:00' } }
+    let(:blue_bmw) { { plate_number: 'ABC-1112', colour: 'Blue', entry_time: '16:00' } }
 
     it 'parks the first car to the first slot' do
       slot = @parking_lot.park(red_toyota)
@@ -52,7 +52,7 @@ RSpec.describe ParkingLot do
 
     describe 'parking lot is full' do
       let(:small_parking_lot) { ParkingLot.new }
-      let(:green_lambo) { Car.new(plate_number: 'ABC-2222', colour: 'Green') }
+      let(:green_lambo) { Car.new(plate_number: 'ABC-2222', colour: 'Green', entry_time: '08:00') }
 
       before do
         @small_parking_lot = small_parking_lot.create_parking_lot(2, 1.00, 0)
@@ -82,13 +82,13 @@ RSpec.describe ParkingLot do
     end
 
     describe 'find' do
-      let(:car1) { { plate_number: 'ABC-1234', colour: 'White' } }
-      let(:car2) { { plate_number: 'ABC-9999', colour: 'White' } }
-      let(:car3) { { plate_number: 'ABC-0001', colour: 'Black' } }
-      let(:car4) { { plate_number: 'ABC-7777', colour: 'Red' } }
-      let(:car5) { { plate_number: 'ABC-2701', colour: 'Blue' } }
-      let(:car6) { { plate_number: 'ABC-3141', colour: 'Black' } }
-      let(:new_car) { { plate_number: 'ABC-333', colour: 'White' } }
+      let(:car1) { { plate_number: 'ABC-1234', colour: 'White', entry_time: '09:00' } }
+      let(:car2) { { plate_number: 'ABC-9999', colour: 'White', entry_time: '09:00' } }
+      let(:car3) { { plate_number: 'ABC-0001', colour: 'Black', entry_time: '09:00' } }
+      let(:car4) { { plate_number: 'ABC-7777', colour: 'Red', entry_time: '09:00' } }
+      let(:car5) { { plate_number: 'ABC-2701', colour: 'Blue', entry_time: '09:00' } }
+      let(:car6) { { plate_number: 'ABC-3141', colour: 'Black', entry_time: '09:00' } }
+      let(:new_car) { { plate_number: 'ABC-333', colour: 'White', entry_time: '09:00' } }
 
       before do
         @parking_lot.park(car1)
