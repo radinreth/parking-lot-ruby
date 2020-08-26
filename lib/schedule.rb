@@ -35,6 +35,14 @@ class Schedule
       all - free_slots
     end
 
+    def entered_cars
+      all.select { |slot| !slot.car.nil? }
+    end
+
+    def leaved_cars
+      all.select { |slot| !slot.exit_time.nil? }
+    end
+
     %i[number car].each do |attr|
       define_method "find_by_#{attr}".to_sym do |param|
         all.detect { |r| r.send(attr) == param }

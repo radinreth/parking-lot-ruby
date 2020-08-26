@@ -1,112 +1,69 @@
-require_relative 'slot'
-require_relative 'car'
+require 'slot'
+require 'car'
 require 'byebug'
 
-class OverLimitException < StandardError; end
-
 class ParkingLot
-  attr_accessor :slots
-  attr_reader :rate_hourly, :grace_period
+  attr_accessor :schedule
+  attr_reader :slot_count, :rate_hourly, :grace_period
 
-  def create_parking_lot(slots_count, rate_hourly, grace_period)
-    @slots = build_slots(slots_count)
+  def create_parking_lot(slot_count, rate_hourly, grace_period)
+    @slot_count = slot_count
     @rate_hourly = rate_hourly
     @grace_period = grace_period
+
+    @schedule = Schedule.new(slot_count)
     self
   end
 
-  def create_parking_lot_say(parking_lot)
-    "Created a parking lot with #{parking_lot.slots.count} slots"
+  def park(car, entry_time)
+    @schedule.add(car, entry_time)
   end
 
-  def park(car_attrs, entry_time:)
-    raise StandardError, 'Sorry, parking lot is full' if free_slots.count.zero?
-
-    car = Car.new(car_attrs)
-    slot = free_slots.first
-    slot.occupy(car)
-    slot
+  def leave(car, exit_time)
+    @schedule.remove(car, exit_time)
   end
 
-  def park_say(slot)
-    "Allocated slot number: #{slot.number}"
+  def entered_cars
+    Schedule.entered_cars
   end
 
-  def free_slots
-    @slots.select(&:free?)
+  def leaved_cars
+    Schedule.leaved_cars
   end
 
-  def used_slots
-    @slots - free_slots
+  def cars_in_grace_period
+    leaved_cars.select { |slot| slot.in_grace?(@grace_period) }
   end
 
-  def leave(plate_number, exit_time)
-    slot = used_slots.select { |s| s.car.plate_number == plate_number }.first
-    slot&.free!
+  def cars_not_in_grace_period
+    leaved_cars - cars_in_grace_period
   end
 
-  def leave_say(slot)
-    "Slot number #{slot.number} is free"
+  def total_earn
+    @rate_hourly * cars_not_in_grace_period.count
   end
 
   def status
-    result = []
-    used_slots.each do |slot|
-      info  = [slot.number]
-      info += [slot.car.plate_number]
-      info += [slot.car.colour]
+    <<-STR
+    Total earn: #{total_earn}
+    Number of enter: #{entered_cars.count}
+    Number of leave: #{leaved_cars.count}
 
-      result << info.join(' | ')
-    end
-
-    result.join('<CR>')
+    *SETTING:
+    Number of slots: #{@slot_count}
+    Hourly rate: #{@rate_hourly}
+    Grace period: #{@grace_period}
+    STR
   end
 
-  def status_say(result)
-    header = 'Slot No. | Plate Number | Colour <CR>'
-    header + result
-  end
-
-  def plate_numbers_for_cars_with_colour(colour)
-    scoped = used_slots.select { |slot| slot.car.colour == colour }
-    scoped.map { |slot| slot.car.plate_number }
-  end
-
-  def plate_numbers_for_cars_with_colour_say(result)
-    result.join(', ')
-  end
-
-  def slot_numbers_for_cars_with_colour(colour)
-    scoped = used_slots.select { |slot| slot.car.colour == colour }
-    scoped.map(&:number)
-  end
-
-  def slot_numbers_for_cars_with_colour_say(result)
-    result.join(', ')
-  end
-
-  def slot_number_for_registration_number(plate_number)
-    scoped = used_slots.select { |slot| slot.car.plate_number == plate_number }
-    raise StandardError, 'Not found' if scoped.empty?
-
-    scoped.first.number
-  end
-
-  def slot_number_for_registration_number_say(result)
-    result
-  end
-
-  private
-
-  def build_slots(count)
-    slots = []
-
-    count.times.each do |num|
-      slot = Slot.new
-      slot.number = num + 1
-      slots << slot
-    end
-
-    slots
+  def log
+    <<-STR
+    Plate No. | Color | Entry | Departure
+    #{
+      entered_cars.map do |sl|
+        "#{sl.car.plate_number} | #{sl.car.colour} | #{sl.entry_time} | #{sl.exit_time}"
+      end.join('\r\n')
+    }
+    STR
   end
 end

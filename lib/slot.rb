@@ -1,3 +1,5 @@
+require 'time'
+
 class Slot
   attr_accessor :number, :car, :entry_time, :exit_time
 
@@ -11,5 +13,15 @@ class Slot
     self.exit_time = nil
 
     self
+  end
+  
+  def in_grace?(grace_period)
+    duration_in_min <= grace_period
+  end
+  
+  private
+
+  def duration_in_min
+    ( Time.parse(exit_time) - Time.parse(entry_time) ) / 60
   end
 end
