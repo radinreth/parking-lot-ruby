@@ -1,0 +1,11 @@
+create_parking_lot 6 10.00 15
+
+park ABC-1234 White 08:00
+park ABC-5678 Black 16:00
+
+leave ABC-5678 16:15
+leave ABC-1234 10:00
+
+status
+
+log

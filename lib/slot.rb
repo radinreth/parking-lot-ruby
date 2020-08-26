@@ -1,4 +1,5 @@
 require 'time'
+require 'byebug'
 
 class Slot
   attr_accessor :number, :car, :entry_time, :exit_time
@@ -16,7 +17,7 @@ class Slot
   end
   
   def in_grace?(grace_period)
-    duration_in_min <= grace_period
+    duration_in_min <= grace_period.to_f
   end
   
   private

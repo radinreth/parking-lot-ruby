@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-WHITELIST_COMMANDS = %(create_parking_lot park leave status plate_numbers_for_cars_with_colour slot_numbers_for_cars_with_colour slot_number_for_registration_number).freeze
+WHITELIST_COMMANDS = %(create_parking_lot park leave status log).freeze
 
 # args
 require 'tty-prompt'
@@ -26,13 +26,15 @@ if ARGV.length.zero?
 
       prompt.say(process(cmd, input, parking_lot))
     rescue StandardError => e
-      prompt.say(e.message)
+      prompt.say(e)
     end
   end
 
 else
   # example: file
   File.readlines(ARGV[0]).each do |line|
+    next if line.strip == ""
+
     begin
       input = line.split
       cmd = input[0]

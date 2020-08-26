@@ -1,4 +1,4 @@
-require 'slot'
+require_relative 'slot'
 
 class Schedule
   attr_reader :slot_count
@@ -43,10 +43,14 @@ class Schedule
       all.select { |slot| !slot.exit_time.nil? }
     end
 
-    %i[number car].each do |attr|
+    %i[number].each do |attr|
       define_method "find_by_#{attr}".to_sym do |param|
         all.detect { |r| r.send(attr) == param }
       end
+    end
+
+    def find_by_car(car)
+      all.detect { |r| r.car&.plate_number == car.plate_number }
     end
   end
 
@@ -68,7 +72,7 @@ class Schedule
   private
 
   def prepare
-    @slot_count.times.each do |num|
+    @slot_count.to_i.times.each do |num|
       slot = ::Slot.new
       slot.number = num + 1
 
