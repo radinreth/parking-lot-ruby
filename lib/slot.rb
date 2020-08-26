@@ -1,20 +1,15 @@
 class Slot
-  attr_accessor :number, :car
-
-  def initialize(car = nil)
-    @car = car
-  end
+  attr_accessor :number, :car, :entry_time, :exit_time
 
   def free?
-    car.nil?
+    car.nil? || !exit_time.nil?
   end
 
   def free!
     self.car = nil
-    self
-  end
+    self.entry_time = nil
+    self.exit_time = nil
 
-  def occupy(car)
-    self.car = car
+    self
   end
 end

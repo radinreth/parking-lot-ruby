@@ -1,23 +1,49 @@
 require 'slot'
+require 'car'
+require 'byebug'
 
 RSpec.describe Slot do
   let(:slot) { Slot.new }
-
-  before do
-    slot.number = 1
-  end
-
-  specify { expect(slot.number).to eq(1) }
+  let(:car) { Car.new('abc-1111', 'White') }
 
   describe '#free?' do
-    let(:car) { Car.new(plate_number: 'abc-1111', colour: 'White') }
-
     specify { expect(slot).to be_free }
 
-    it 'is not free' do
-      slot.car = car
+    context "Free" do
+      it 'has no car' do
+        slot.car = nil
 
-      expect(slot).not_to be_free
+        expect(slot).to be_free
+      end
+
+      it 'has exit_time' do
+        slot.exit_time = '01:00'
+
+        expect(slot).to be_free
+      end
+    end
+
+    context "Not Free" do
+      it 'has car and no exit_time' do
+        slot.car = car
+        slot.exit_time = nil
+
+        expect(slot).not_to be_free
+      end
+    end
+  end
+
+  describe "free!" do
+    before do
+      slot.car = car
+      slot.exit_time = nil
+    end
+
+    specify { expect(slot).not_to be_free }
+    it "free the slot" do
+      slot.free!
+
+      expect(slot).to be_free
     end
   end
 end
