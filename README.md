@@ -6,7 +6,7 @@ https://www.notion.so/Parking-Lot-Problem-Exercise-1-5f9d2994978f4d659f39f86def6
 
 Part2
 
-https://www.notion.so/Parking-Lot-Problem-Change-Request-6a701e583f874fbd9dc571111e537d95
+https://www.notion.so/Parking-Lot-Problem-Exercise-2-6a701e583f874fbd9dc571111e537d95
 
 ## How to run:
 
